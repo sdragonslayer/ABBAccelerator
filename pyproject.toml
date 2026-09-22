@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "proofrag"
+version = "0.1.0"
+description = "Evidence-first multimodal maintenance intelligence for ABB Accelerator 2026"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [
+  { name = "ProofRAG Team" },
+]
+dependencies = [
+  "fastapi>=0.116.0",
+  "httpx>=0.28.1",
+  "pydantic-settings>=2.10.0",
+  "pymupdf>=1.26.0",
+  "python-multipart>=0.0.20",
+  "uvicorn[standard]>=0.35.0",
+]
+
+[project.scripts]
+proofrag = "proofrag.main:run"
+proofrag-seed = "proofrag.cli:seed"
+proofrag-evaluate = "proofrag.cli:evaluate"
+
+[dependency-groups]
+dev = [
+  "mypy>=1.17.0",
+  "pytest>=8.4.0",
+  "pytest-asyncio>=1.1.0",
+  "ruff>=0.12.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/proofrag"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = [
+  ".tmp",
+  ".uv-cache",
+  ".venv",
+  "data/pytest-runtime",
+  "data/runtime-temp",
+  "data/uploads",
+  "data/evaluation-results",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = "pymupdf"
+ignore_missing_imports = true

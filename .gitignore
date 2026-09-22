@@ -1,0 +1,24 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.uv-cache/
+.tmp/
+pytest-cache-files-*/
+data/runtime-temp*/
+data/pytest-runtime/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Runtime data
+data/proofrag.db
+data/uploads/*
+!data/uploads/.gitkeep
+data/evaluation-results/*
+!data/evaluation-results/.gitkeep

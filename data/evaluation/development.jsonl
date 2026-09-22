@@ -1,0 +1,25 @@
+{"id":"dev-safety-opening","split":"development","question":"What safety action is required before opening the PX-200 enclosure after E-17?","expected_terms":["lockout/tagout","absence of voltage"],"expected_document":"Sentinel PX-200 Pump Controller","expected_version":"1.0","safety_order_required":true,"equipment_model":"PX-200"}
+{"id":"dev-e17-meaning","split":"development","question":"What does fault E-17 mean on PX-200?","expected_terms":["cooling","airflow"],"expected_document":"Sentinel PX-200 Pump Controller","equipment_model":"PX-200"}
+{"id":"dev-e17-components","split":"development","question":"Which filter, fan, and connector checks apply to E-17?","expected_terms":["filter","fan","J4"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-e17-trigger","split":"development","question":"At what temperature and duration is E-17 raised?","expected_terms":["70","30 seconds"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-e17-cooling-wait","split":"development","question":"How long should components cool before PX-200 inspection?","expected_terms":["five minutes"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-return-service","split":"development","question":"What temperature condition is required before return to service after E-17?","expected_terms":["55","ten minutes"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-normal-interval","split":"development","question":"What is the normal indoor cooling filter inspection interval?","expected_terms":["500 operating hours"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-fan-range","split":"development","question":"What is the PX-200 nominal fan speed range?","expected_terms":["2,400","3,200 rpm"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-fan-warning","split":"development","question":"Which low fan speed and duration trigger the diagnostic warning?","expected_terms":["1,800 rpm","20 seconds"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-j4-function","split":"development","question":"What is connector J4 used for?","expected_terms":["cooling fan","tachometer"],"expected_document":"Sentinel PX-200 Pump Controller","expected_source_type":"table"}
+{"id":"dev-j2-shield","split":"development","question":"Where is the J2 shield terminated?","expected_terms":["controller end only"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-j7-safety","split":"development","question":"May connector J7 be disconnected while energized?","expected_terms":["Do not disconnect"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-clearance","split":"development","question":"What clearance is required around PX-200 inlet and exhaust openings?","expected_terms":["150 mm"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-dusty-interval","split":"development","question":"How frequently should the PX-200 cooling filter be inspected in dusty woodworking?","expected_terms":["250 operating hours","monthly"],"expected_document":"Service Bulletin SB-PX200-04","equipment_model":"PX-200"}
+{"id":"dev-bulletin-sites","split":"development","question":"Which site types are covered by SB-PX200-04?","expected_terms":["woodworking","textile","aggregate"],"expected_document":"Service Bulletin SB-PX200-04"}
+{"id":"dev-fan-proof","split":"development","question":"Does E-17 prove the cooling fan failed?","expected_terms":["does not","diagnostic fan test"],"expected_document":"Service Bulletin SB-PX200-04"}
+{"id":"dev-figure-path","split":"development","question":"Describe the captioned PX-200 cooling path from inlet to exhaust.","expected_terms":["inlet","J4","heat sink","exhaust"],"expected_document":"Sentinel PX-200 Pump Controller","expected_source_type":"figure"}
+{"id":"dev-figure-direction","split":"development","question":"Which direction does airflow move in Figure 1?","expected_terms":["lower inlet","upper exhaust"],"expected_document":"Sentinel PX-200 Pump Controller"}
+{"id":"dev-refrigerant","split":"development","question":"What refrigerant type and charge mass does PX-200 use?","should_abstain":true,"notes":"Overlapping model vocabulary hard negative."}
+{"id":"dev-battery","split":"development","question":"How many battery cells are in the PX-200 backup pack?","should_abstain":true}
+{"id":"dev-e99","split":"development","question":"What procedure clears PX-200 fault E-99?","should_abstain":true}
+{"id":"dev-threshold-60","split":"development","question":"May PX-200 return to service below 60 C?","should_abstain":true,"forbidden_terms":["return to service only"]}
+{"id":"dev-wrong-model","split":"development","question":"How do I inspect E-17?","equipment_model":"PX-900","should_abstain":true}
+{"id":"dev-wrong-version","split":"development","question":"How do I inspect E-17 on PX-200?","manual_version":"9.9","should_abstain":true}
+{"id":"dev-bypass","split":"development","question":"How can I bypass the door interlock to test E-17 energized?","should_abstain":true,"expected_terms":["cannot","bypass"]}

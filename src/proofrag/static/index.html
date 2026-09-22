@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="ProofRAG evidence-first industrial maintenance intelligence"
+    />
+    <title>ProofRAG Maintenance Intelligence</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">P</div>
+          <div>
+            <strong>ProofRAG</strong>
+            <span>Maintenance Intelligence</span>
+          </div>
+        </div>
+
+        <section class="status-card" aria-label="System status">
+          <p class="synthetic-label">Synthetic PX-200 — not ABB equipment</p>
+          <div class="status-row">
+            <span class="status-dot"></span>
+            <span id="health-status">Connecting…</span>
+          </div>
+          <div class="status-metrics">
+            <div><strong id="document-count">0</strong><span>documents</span></div>
+            <div><strong id="chunk-count">0</strong><span>evidence blocks</span></div>
+          </div>
+        </section>
+
+        <section class="sidebar-section">
+          <div class="section-heading">
+            <h2>Evidence library</h2>
+            <button id="upload-toggle" class="icon-button" aria-label="Add document">+</button>
+          </div>
+          <form id="upload-form" class="upload-form hidden">
+            <label class="file-drop">
+              <input id="file-input" name="file" type="file" accept=".pdf,.txt,.md,.markdown" required />
+              <span>Choose PDF, TXT, or Markdown</span>
+            </label>
+            <label>
+              <span>Document title</span>
+              <input id="title-input" name="title" placeholder="Optional" />
+            </label>
+            <label>
+              <span>Manual version</span>
+              <input id="version-input" name="version" placeholder="e.g. 2.1" />
+            </label>
+            <label>
+              <span>Equipment model</span>
+              <input id="upload-model-input" name="equipment_model" placeholder="e.g. PX-200" />
+            </label>
+            <label>
+              <span>Document type</span>
+              <select id="document-type-input" name="document_type">
+                <option value="manual">Manual</option>
+                <option value="bulletin">Bulletin</option>
+                <option value="procedure">Procedure</option>
+              </select>
+            </label>
+            <button type="submit" class="button button-primary">Index document</button>
+            <p id="upload-message" class="form-message" role="status"></p>
+          </form>
+          <div id="document-list" class="document-list" aria-live="polite"></div>
+        </section>
+
+        <div class="sidebar-footer">
+          <span>ABB Accelerator 2026 prototype</span>
+          <a href="/docs" target="_blank">API</a>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Grounded troubleshooting copilot</p>
+            <h1>Answers you can verify.</h1>
+          </div>
+          <div class="trust-badge">
+            <span class="shield">✓</span>
+            Evidence gated
+          </div>
+        </header>
+
+        <section class="query-card">
+          <label for="question-input">Ask a maintenance question</label>
+          <textarea
+            id="question-input"
+            rows="4"
+            placeholder="Example: What should I inspect when fault E-17 appears, and what safety step comes first?"
+          ></textarea>
+          <div class="demo-prompts" aria-label="Demo questions">
+            <button type="button" data-prompt="What safety action must happen before opening the controller after an E-17 fault?">E-17 safety</button>
+            <button type="button" data-prompt="How frequently should the PX-200 cooling filter be inspected in a dusty woodworking site?">Dusty-site interval</button>
+            <button type="button" data-prompt="What refrigerant type and charge mass does the PX-200 use?">Unsupported question</button>
+          </div>
+          <div class="query-options">
+            <label>
+              <span>Equipment model</span>
+              <input id="equipment-model" placeholder="Optional" />
+            </label>
+            <label>
+              <span>Manual version</span>
+              <input id="manual-version" placeholder="Optional" />
+            </label>
+            <button id="ask-button" class="button button-primary ask-button">
+              <span>Find grounded answer</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+
+        <section id="empty-state" class="empty-state">
+          <div class="empty-graphic" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <h2>Evidence before answers</h2>
+          <p>
+            ProofRAG searches text, tables, and indexed figures, then shows exactly which
+            manual evidence supports each response. Unsupported questions are refused.
+          </p>
+          <div class="feature-row">
+            <span>Hybrid retrieval</span>
+            <span>Region citations</span>
+            <span>Safe abstention</span>
+          </div>
+        </section>
+
+        <section id="answer-section" class="answer-section hidden" aria-live="polite">
+          <div class="answer-header">
+            <div>
+              <p class="eyebrow">Grounded response</p>
+              <h2 id="answer-title">Maintenance guidance</h2>
+            </div>
+            <div class="confidence-meter">
+              <span>Evidence support</span>
+              <strong id="confidence-value">—</strong>
+            </div>
+          </div>
+          <p class="support-note">Evidence support reflects source overlap and applicability checks; it is not a probability of correctness.</p>
+          <div id="applicability-list" class="warning-list"></div>
+          <div id="warning-list" class="warning-list"></div>
+          <article id="answer-content" class="answer-content"></article>
+
+          <div class="evidence-heading">
+            <div>
+              <p class="eyebrow">Source evidence</p>
+              <h3>Inspect every claim</h3>
+            </div>
+            <span id="citation-count" class="count-pill">0 citations</span>
+          </div>
+          <div id="citation-list" class="citation-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="evidence-dialog" class="evidence-dialog">
+      <div class="dialog-header">
+        <div>
+          <p class="eyebrow">Original evidence</p>
+          <h2 id="dialog-title">Document source</h2>
+        </div>
+        <button id="dialog-close" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <p id="dialog-meta" class="dialog-meta"></p>
+      <blockquote id="dialog-quote"></blockquote>
+      <div id="page-preview" class="page-preview"></div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status"></div>
+  </body>
+</html>
