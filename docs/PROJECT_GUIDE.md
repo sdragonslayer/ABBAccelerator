@@ -106,7 +106,7 @@ The synthetic PX-200 base manual and service bulletin create three clear scenes:
 - `uv.lock`: exact cross-platform dependency resolution.
 - `.python-version`: intended Python 3.12 interpreter.
 - `.env.example`: safe configuration template.
-- `Dockerfile` and `compose.yaml`: container packaging and persistent runtime data.
+- `uv` and `uv.lock`: the sole supported local packaging and execution path.
 - `LICENSE`: MIT project license.
 
 ## 6. Requirements traceability
@@ -123,9 +123,9 @@ The synthetic PX-200 base manual and service bulletin create three clear scenes:
 | Project summary | `docs/PROJECT_SUMMARY.md` | Draft complete |
 | Working prototype | `src/proofrag/` | Locked runtime and automated paths verified |
 | Demo video | `docs/DEMO_VIDEO_SCRIPT.md` | Script complete; recording pending |
-| Source repository | Current workspace | Files complete; public Git repository pending |
+| Source repository | Tracked `origin` on `master` | Initialized and pushed locally; public/private-browser access check and submission tag pending |
 | Technical documentation | `docs/TECHNICAL_DOCUMENTATION.md` | Draft complete |
-| Presentation upload | `docs/PRESENTATION_DECK.md` | Outline complete; accepted upload file still pending |
+| Presentation upload | `ProofRAG_Idea_Report.pdf` and `docs/PRESENTATION_DECK.md` | Three-page PDF opens and is under 50 MB, but page 3 has stale pre-verification evaluation copy and no link annotations/screenshots; regenerate before submission |
 | Evaluation evidence | `docs/EVALUATION_PLAN.md` and evaluation runner | First run and post-fix locked run recorded |
 | Responsible AI | `docs/RESPONSIBLE_AI.md` | Draft complete |
 
@@ -148,10 +148,11 @@ The synthetic PX-200 base manual and service bulletin create three clear scenes:
 
 ## 8. Verified locked run
 
-Dependencies were synced with `uv sync --locked` on 2026-09-21. The repeatable startup path is:
+Dependencies were synced on 2026-09-21. On 2026-09-26, 30 tests, Ruff, strict mypy, lock checking, and a fresh 25/25 isolated locked evaluation passed. The repeatable startup path is:
 
 ```powershell
 uv sync --locked
+uv run --locked python scripts/build_demo_pdfs.py
 uv run --locked proofrag-seed
 uv run --locked proofrag
 ```
@@ -170,10 +171,11 @@ Open `http://127.0.0.1:8000` and manually exercise:
 Then run:
 
 ```powershell
-uv run --locked proofrag-evaluate
+uv lock --check
 uv run --locked pytest
 uv run --locked ruff check .
 uv run --locked mypy src
+uv run --locked proofrag-evaluate
 ```
 
 Record actual results and defects. Do not edit claims to imply that targets were achieved unless the outputs support them.
@@ -184,7 +186,7 @@ Record actual results and defects. Do not edit claims to imply that targets were
 
 1. Create and upload the required presentation file from the outline.
 2. Capture screenshots and record the primary and backup demo videos.
-3. Initialize and push an approved Git repository, then tag the submitted commit.
+3. Verify the configured repository is accessible as intended, then tag the submitted commit.
 4. Have an independent domain reviewer adjudicate the 50 authored evaluation cases.
 5. Verify final repository, video, deck, and submission links in a private browser.
 

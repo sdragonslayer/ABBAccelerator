@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import subprocess
 from pathlib import Path
 from time import perf_counter
 
@@ -13,6 +14,32 @@ from proofrag.models import DocumentType
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEMO_CORPUS = PROJECT_ROOT / "data" / "demo-corpus"
 EVALUATION_CASES = PROJECT_ROOT / "data" / "evaluation" / "locked.jsonl"
+
+
+def git_metadata() -> dict[str, object]:
+    try:
+        revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=PROJECT_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        status = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=PROJECT_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (FileNotFoundError, subprocess.SubprocessError):
+        return {"commit": "unavailable", "working_tree_dirty": None}
+    return {
+        "commit": revision.stdout.strip() or "unavailable",
+        "working_tree_dirty": bool(status.stdout.strip()),
+    }
 
 
 def seed() -> None:
@@ -66,18 +93,19 @@ async def _evaluate() -> None:
     for path in sorted(DEMO_CORPUS.glob("*.pdf")):
         corpus_hash.update(path.name.encode("utf-8"))
         corpus_hash.update(path.read_bytes())
+    metadata: dict[str, object] = {
+        "case_file": str(EVALUATION_CASES.relative_to(PROJECT_ROOT)),
+        "corpus_sha256": corpus_hash.hexdigest(),
+        "answer_provider": settings.answer_provider,
+        "embedding_dimensions": settings.embedding_dimensions,
+        "min_query_coverage": settings.min_query_coverage,
+        "min_absolute_similarity": settings.min_absolute_similarity,
+    }
+    metadata.update(git_metadata())
     write_report(
         output,
         results,
-        metadata={
-            "case_file": str(EVALUATION_CASES.relative_to(PROJECT_ROOT)),
-            "corpus_sha256": corpus_hash.hexdigest(),
-            "commit": "unavailable (workspace is not a Git repository)",
-            "answer_provider": settings.answer_provider,
-            "embedding_dimensions": settings.embedding_dimensions,
-            "min_query_coverage": settings.min_query_coverage,
-            "min_absolute_similarity": settings.min_absolute_similarity,
-        },
+        metadata=metadata,
     )
     passed = sum(result.passed for result in results)
     print(f"Evaluation: {passed}/{len(results)} passed")

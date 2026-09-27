@@ -59,6 +59,7 @@ After dependency installation is authorized, the standard commands are:
 
 ```powershell
 uv sync --locked
+uv run --locked python scripts/build_demo_pdfs.py
 uv run --locked proofrag-seed
 uv run --locked proofrag
 uv run --locked proofrag-evaluate
@@ -161,12 +162,12 @@ A product change is complete when:
 ## Current handoff status
 
 - `uv.lock` exists and matches `pyproject.toml`.
-- The locked dependencies were synced and the local runtime path was exercised on 2026-09-21.
+- The locked dependencies were synced and the complete local `uv` runtime path was exercised on 2026-09-26.
 - The synthetic PDF manual and bulletin are generated from retained editable sources and are the preferred demo seed; Markdown and PDF duplicates are not seeded together.
-- Ranking is separate from the structured evidence decision. Exact identifiers/numbers, absolute support, and model/version applicability participate in the gate.
-- Equipment model and document type metadata, safe upload handling, safeguard refusal, cited safety ordering, external-citation validation, applicability warnings, and zero-citation abstention are implemented.
-- Evaluation is split into 25 development and 25 locked cases. The first locked run (18/25) and reviewed post-fix run (25/25) are documented in `docs/EVALUATION_PLAN.md`; measurements are synthetic-corpus results, not field claims.
-- The current workspace is not a Git repository, so no commit identifier, push, or tag has been verified.
+- Ranking is separate from the structured evidence decision. Exact identifiers/numbers, absolute support, and model/version applicability participate in the gate, which evaluates the exact pruned evidence bundle sent to the answer provider.
+- Equipment model and document type metadata, safe upload handling, safeguard refusal, cited safety ordering, strict external-answer validation, applicability warnings, and zero-citation abstention are implemented.
+- Evaluation is split into 25 development and 25 locked cases. The first locked run (18/25), reviewed post-fix run (25/25), and corrected raw-retrieval rerun (25/25) are documented in `docs/EVALUATION_PLAN.md`; measurements are synthetic-corpus results, not field claims.
+- The workspace is a Git repository on `master` with a configured `origin`. Evaluation reports record the commit and dirty-worktree state; the final submitted commit, push, and tag must still be verified after current changes are committed.
 - `docs/HANDOFF.md` is the canonical current handoff, final presentation outline, extension backlog, and remaining-work list.
-- Final verification passed 23 tests, Ruff, strict mypy, lock checking, clean PDF seed, and 25/25 authored locked evaluation cases. Docker was unavailable; two upstream TestClient deprecation warnings remain.
-- An accepted presentation file, screenshots, recorded video, verified links, team details, and final submission remain human/external tasks.
+- Final verification passed 30 tests, Ruff, strict mypy, lock checking, a clean PDF seed, and 25/25 authored locked evaluation cases. The locked `uv` workflow is the sole supported execution path; two upstream TestClient deprecation warnings remain.
+- The tracked idea-report PDF and verified team identity are present. Final screenshots, recorded video, link checks, submitted tag, and final platform submission remain human/external tasks.

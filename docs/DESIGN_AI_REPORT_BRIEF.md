@@ -242,7 +242,7 @@ BM25 exact-term scoring · local vector similarity · weighted score merge · do
 Evidence threshold · extractive or approved OpenAI-compatible provider · application-owned citations · independent safety notices · abstention
 
 **E — Experience and audit layer**  
-FastAPI · technician web interface · evidence support (not correctness probability) · citation cards · highlighted source viewer · privacy-preserving query audit trail
+FastAPI · technician web interface · evidence support (not correctness probability) · citation cards · highlighted source viewer · data-minimized query audit trail
 
 ### Page 2 visual
 
@@ -289,7 +289,7 @@ Hybrid lexical retrieval + deterministic local vector baseline + evidence-gated 
 **Retrieval:** BM25 · feature hashing · cosine similarity  
 **Storage:** SQLite prototype evidence and audit store  
 **Interface:** HTML · CSS · JavaScript  
-**Packaging and quality:** uv · pytest · Ruff · mypy · Docker
+**Packaging and quality:** uv · pytest · Ruff · mypy
 
 Do not add React, LangGraph, Neo4j, FAISS, Qdrant, PostgreSQL, or a vision-language model to the current-stack list. Those are possible production migrations or future extensions, not current prototype dependencies.
 
@@ -548,7 +548,7 @@ Create a polished three-page A4 portrait idea report for “ProofRAG: Evidence-F
 
 Use the attached design brief as the only source of product facts and copy. Follow Part I page by page, recreate the Part II architecture diagram as editable vectors, and use the specified visual tokens. The aesthetic should feel like a credible industrial technology proposal: precise, restrained, editorial, high-contrast, and easy to scan. Use warm white space, charcoal, ProofRAG red (#E30613), thin rules, evidence-box motifs, citation chips, and safety/abstention states. Do not use robot imagery, glowing AI brains, fictitious equipment, or unlicensed ABB branding.
 
-Do not invent team members, metrics, customers, evaluation results, screenshots, integrations, or business savings. Keep placeholders for team details. Mark the PX-200 corpus as synthetic and not ABB equipment. Preserve the distinction between implemented source, runtime verification pending, evaluation targets, and future work. Never describe ProofRAG as controlling equipment or replacing qualified personnel.
+Do not invent team members, metrics, customers, screenshots, integrations, or business savings. Use only verified team details and the bounded synthetic-corpus evaluation results recorded in `docs/EVALUATION_PLAN.md`. Mark the PX-200 corpus as synthetic and not ABB equipment. Preserve the distinction between implemented and runtime-verified behavior, evaluation targets, measured synthetic results, and future work. Never describe ProofRAG as controlling equipment or replacing qualified personnel.
 
 Page 1 must establish the fragmented-document, version, verification, and missing-evidence problem. Page 2 must explain the solution workflow, six differentiating features, and five-layer architecture. Page 3 must present the current stack, synthetic demonstration, innovation, evaluation framework, expected value, limitations, roadmap, and bounded-pilot ask.
 

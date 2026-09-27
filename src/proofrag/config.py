@@ -30,7 +30,6 @@ class Settings(BaseSettings):
     default_top_k: int = Field(default=6, ge=1, le=20)
     bm25_weight: float = Field(default=0.60, ge=0, le=1)
     vector_weight: float = Field(default=0.40, ge=0, le=1)
-    min_evidence_score: float = Field(default=0.18, ge=0, le=1)
     min_query_coverage: float = Field(default=0.34, ge=0, le=1)
     min_absolute_similarity: float = Field(default=0.08, ge=0, le=1)
     embedding_dimensions: int = Field(default=384, ge=64, le=4096)

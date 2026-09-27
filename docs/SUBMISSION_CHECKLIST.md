@@ -43,7 +43,8 @@ Artifact: `docs/DEMO_VIDEO_SCRIPT.md`
 - [x] README and license present.
 - [x] Tests and evaluation fixtures present.
 - [x] Runtime data ignored.
-- [ ] Initialize/push the approved Git repository.
+- [x] Initialize the Git repository and configure/push the tracked `origin` branch.
+- [ ] Verify public repository access from a private browser.
 - [ ] Run secret scanning before making it public.
 - [ ] Tag the submitted commit.
 
@@ -65,7 +66,8 @@ Artifacts: `docs/TECHNICAL_DOCUMENTATION.md`, `docs/EVALUATION_PLAN.md`, and `do
 - [x] Ten-slide narrative drafted.
 - [x] Complete ABB-style report layout and design-AI prompt drafted.
 - [x] Final presentation outline frozen in `docs/HANDOFF.md`.
-- [ ] Add team, real screenshots, and verified links in the final slide file.
+- [x] Verify the tracked `ProofRAG_Idea_Report.pdf` opens, is under 50 MB, identifies Siyuan Du/University of Pennsylvania, and carries the synthetic/non-ABB disclaimer.
+- [ ] Regenerate the PDF: page 3 still says only six smoke cases exist and runtime verification is pending; the current file also has no link annotations or embedded screenshots.
 - [ ] Rehearse to the allotted pitch duration.
 - [ ] Export PDF backup.
 
@@ -84,12 +86,12 @@ Artifacts: `docs/PRESENTATION_DECK.md`, `docs/DESIGN_AI_REPORT_BRIEF.md`
 
 - [x] `uv lock --check`
 - [x] `uv sync --locked`
-- [x] `uv run --locked pytest` (23 passed; two upstream deprecation warnings)
+- [x] `uv run --locked pytest` (30 passed; two upstream deprecation warnings)
 - [x] `uv run --locked ruff check .`
 - [x] `uv run --locked mypy src`
-- [x] `uv run --locked proofrag-evaluate` (25/25 authored locked cases)
+- [x] `uv run --locked proofrag-evaluate` (25/25 authored locked cases on 2026-09-26; rerun after committing for clean revision metadata)
 - [x] All current Markdown claims distinguish measured synthetic evidence from targets.
-- [ ] Build/smoke-test Docker (Docker CLI unavailable on verification machine).
+- [x] Keep the verified locked `uv` workflow as the sole supported execution path.
 - [ ] All third-party sources and licenses are attributed.
 - [ ] No proprietary or personal data is committed.
 - [ ] Submission links work in a private browser window.

@@ -10,11 +10,13 @@ Review of that run identified genuine defects in compound safeguard-refusal word
 
 The reviewed post-fix rerun on 2026-09-21 passed 25/25 authored locked cases. Recall@1, Recall@5, MRR, unsupported-question accuracy, citation completeness, and safety-order accuracy were 1.000; false procedural-answer rate was 0.000; the automated document-level citation precision proxy was 0.750; median/P95 query latency was 24.454/34.710 ms. The report records the threshold configuration, timestamp, corpus SHA-256, and the absence of a commit identifier because this workspace is not yet a Git repository. These are local synthetic-corpus measurements, not field accuracy or human-adjudicated faithfulness.
 
+On 2026-09-26, retrieval metrics were corrected to use the retriever's ranked hits rather than the final answer's selected citations. Citation completeness was also made part of supported-case pass/fail, the evidence gate was aligned with the exact pruned bundle sent to the generator, and hosted-answer validation was strengthened. A fresh isolated run still passed 25/25. Raw Recall@1/5 and MRR were 1.000; unsupported accuracy, citation completeness, and safety-order accuracy were 1.000; false procedural-answer rate was 0.000; the document-level citation precision proxy was 0.750; median/P95 answer latency was 20.833/24.871 ms. The report recorded commit `dc28f95b4738c8b5c14e9a9f5b8fc423f1f182bf` and `working_tree_dirty: true`; rerun after committing to bind final results to the submitted revision.
+
 ## Evaluation dimensions
 
 ### 1. Retrieval quality
 
-- **Recall@5:** Proportion of questions for which a supporting evidence block appears in the first five results.
+- **Recall@1/5:** Proportion of questions for which a supporting evidence block appears in the first one/five raw retrieval results, before answer citation selection.
 - **Mean reciprocal rank:** Rewards placing the first correct evidence block earlier.
 - **Version accuracy:** Proportion of version-filtered questions citing only the requested version.
 - **Source-type recall:** Separate recall for ordinary text, tables, figures, and OCR blocks.
@@ -69,7 +71,7 @@ uv run --locked proofrag-evaluate
 uv run --locked pytest
 ```
 
-The evaluation command creates `data/evaluation-results/latest.json`.
+The evaluation command creates `data/evaluation-results/latest.json` and records the Git commit plus whether the working tree was dirty.
 
 ## Prototype acceptance targets
 

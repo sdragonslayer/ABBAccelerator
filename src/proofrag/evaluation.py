@@ -5,6 +5,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from time import perf_counter
 
+from starlette.concurrency import run_in_threadpool
+
 from proofrag.models import AskRequest, EvaluationCase, EvaluationResult
 from proofrag.service import GroundedAnswerService
 
@@ -26,6 +28,22 @@ async def evaluate_cases(
 ) -> list[EvaluationResult]:
     results: list[EvaluationResult] = []
     for case in cases:
+        retrieval_hits = await run_in_threadpool(
+            service.retriever.search,
+            case.question,
+            top_k=5,
+            equipment_model=case.equipment_model,
+            manual_version=case.manual_version,
+        )
+        matching_ranks = [
+            index
+            for index, hit in enumerate(retrieval_hits, start=1)
+            if case.expected_document
+            and case.expected_document.casefold() in hit.document_title.casefold()
+        ]
+        retrieval_rank = matching_ranks[0] if matching_ranks else None
+        retrieval_hit = case.expected_document is None or retrieval_rank is not None
+
         started = perf_counter()
         response = await service.answer(
             AskRequest(
@@ -39,16 +57,6 @@ async def evaluate_cases(
         matched_terms = sum(term.casefold() in answer_folded for term in case.expected_terms)
         term_coverage = matched_terms / len(case.expected_terms) if case.expected_terms else 1.0
         citation_documents = [citation.document_title for citation in response.citations]
-        matching_ranks = [
-            index
-            for index, title in enumerate(citation_documents, start=1)
-            if case.expected_document
-            and case.expected_document.casefold() in title.casefold()
-        ]
-        retrieval_rank = matching_ranks[0] if matching_ranks else None
-        retrieval_hit = case.expected_document is None or any(
-            case.expected_document.casefold() in title.casefold() for title in citation_documents
-        )
         abstention_correct = response.abstained == case.should_abstain
         expected_citations = 0 if case.should_abstain else 1
         correct_citations = sum(
@@ -90,6 +98,7 @@ async def evaluate_cases(
             and abstention_correct
             and term_coverage >= 0.75
             and version_model_correct
+            and citation_completeness == 1.0
             and safety_order_correct
             and forbidden_absent
         )

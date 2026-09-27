@@ -54,3 +54,26 @@ def test_duplicate_document_is_reused(tmp_path: Path) -> None:
     assert first.document.id == second.document.id
     assert second.warnings
 
+
+def test_duplicate_document_reports_conflicting_metadata(tmp_path: Path) -> None:
+    _, ingestor, _ = build_components(tmp_path)
+    payload = b"# Manual\n\nA unique maintenance procedure."
+
+    ingestor.ingest_bytes(
+        filename="manual.md",
+        data=payload,
+        title="Original title",
+        version="1.0",
+        equipment_model="PX-200",
+    )
+    duplicate = ingestor.ingest_bytes(
+        filename="manual.md",
+        data=payload,
+        title="Corrected title",
+        version="2.0",
+        equipment_model="PX-900",
+    )
+
+    warning = duplicate.warnings[0]
+    assert "Supplied metadata differed" in warning
+    assert all(field in warning for field in ("title", "version", "equipment model"))

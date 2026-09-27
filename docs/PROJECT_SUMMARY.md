@@ -74,7 +74,7 @@ The bundled synthetic PX-200 corpus contains a base manual and a later service b
 | Criterion | Evidence in ProofRAG |
 |---|---|
 | Innovation & Creativity | Region citations, explicit evidence decision, applicability visibility, offline mode |
-| Technical Excellence | Typed service boundaries, hybrid retrieval, structured storage, evaluation harness, Docker packaging |
+| Technical Excellence | Typed service boundaries, hybrid retrieval, structured storage, locked `uv` environment, evaluation harness |
 | Problem–Solution Fit | Direct implementation of multimodal manual troubleshooting with cited answers |
 | Scalability & Feasibility | Swappable embedding/generation providers and documented production migration path |
 | User Experience | Technician-oriented query flow and side-by-side evidence inspection |

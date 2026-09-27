@@ -81,11 +81,28 @@ class DocumentIngestor:
             )
 
         checksum = hashlib.sha256(data).hexdigest()
+        resolved_title = (title or Path(filename).stem.replace("_", " ")).strip()
+        resolved_version = version.strip() if version and version.strip() else None
+        resolved_model = (
+            equipment_model.strip() if equipment_model and equipment_model.strip() else None
+        )
         existing = self.database.find_document_by_checksum(checksum)
         if existing:
+            conflicts: list[str] = []
+            if existing.title != resolved_title:
+                conflicts.append("title")
+            if existing.version != resolved_version:
+                conflicts.append("version")
+            if existing.equipment_model != resolved_model:
+                conflicts.append("equipment model")
+            if existing.document_type != document_type:
+                conflicts.append("document type")
+            warning = "This exact file was already indexed; the existing document was reused."
+            if conflicts:
+                warning += " Supplied metadata differed for: " + ", ".join(conflicts) + "."
             return IngestionResponse(
                 document=existing,
-                warnings=["This exact file was already indexed; the existing document was reused."],
+                warnings=[warning],
             )
 
         document_id = checksum[:20]
@@ -109,17 +126,14 @@ class DocumentIngestor:
             local_path.unlink(missing_ok=True)
             raise IngestionError("No readable text, tables, figures, or OCR content was found")
 
-        resolved_title = (title or Path(filename).stem.replace("_", " ")).strip()
         chunks = self._build_chunks(document_id, blocks)
         content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
         document = DocumentRecord(
             id=document_id,
             filename=Path(filename).name,
             title=resolved_title,
-            version=version.strip() if version and version.strip() else None,
-            equipment_model=(
-                equipment_model.strip() if equipment_model and equipment_model.strip() else None
-            ),
+            version=resolved_version,
+            equipment_model=resolved_model,
             document_type=document_type,
             checksum=checksum,
             content_type=content_type,

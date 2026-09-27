@@ -62,18 +62,18 @@ class GroundedAnswerService:
         hits = await run_in_threadpool(
             self.retriever.search,
             request.question,
-            top_k=max(request.top_k or self.retriever.settings.default_top_k, 8),
+            top_k=request.top_k or max(self.retriever.settings.default_top_k, 8),
             document_ids=request.document_ids,
             equipment_model=request.equipment_model,
             manual_version=request.manual_version,
         )
         empty_reason = await run_in_threadpool(self._empty_reason, request)
+        relevant_hits = self._prune_hits(hits)
         decision = self.evidence_gate.decide(
             request.question,
-            hits,
+            relevant_hits,
             empty_reason=empty_reason,
         )
-        relevant_hits = self._prune_hits(hits)
         draft = await self.generator.generate(request.question, relevant_hits, decision)
         return await self._response(request, relevant_hits, decision, draft)
 

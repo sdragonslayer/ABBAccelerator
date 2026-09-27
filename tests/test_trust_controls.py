@@ -14,7 +14,14 @@ from proofrag.config import Settings
 from proofrag.database import Database
 from proofrag.embeddings import HashingEmbedder
 from proofrag.ingestion import DocumentIngestor
-from proofrag.models import AskRequest, DocumentType, EvidenceReason
+from proofrag.models import (
+    AskRequest,
+    ChunkRecord,
+    DocumentType,
+    EvidenceReason,
+    SearchHit,
+    SourceType,
+)
 from proofrag.retrieval import HybridRetriever
 from proofrag.safety import SafetyPolicy
 from proofrag.service import GroundedAnswerService
@@ -121,6 +128,24 @@ async def test_empty_selection_does_not_search_all_documents(
 
 
 @pytest.mark.asyncio
+async def test_requested_top_k_is_honored(
+    service_and_ingestor: tuple[GroundedAnswerService, DocumentIngestor, Database],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    service, _, _ = service_and_ingestor
+    captured: dict[str, object] = {}
+
+    def search(*_args: object, **kwargs: object) -> list[SearchHit]:
+        captured.update(kwargs)
+        return []
+
+    monkeypatch.setattr(service.retriever, "search", search)
+    await service.answer(AskRequest(question="How do I inspect E-17?", top_k=2))
+
+    assert captured["top_k"] == 2
+
+
+@pytest.mark.asyncio
 async def test_safeguard_bypass_is_hard_refusal(
     service_and_ingestor: tuple[GroundedAnswerService, DocumentIngestor, Database],
 ) -> None:
@@ -179,6 +204,54 @@ async def test_irrelevant_document_does_not_change_supported_decision(
     assert before.evidence_decision.reason == after.evidence_decision.reason
 
 
+@pytest.mark.asyncio
+async def test_evidence_gate_uses_only_hits_available_to_generator(
+    service_and_ingestor: tuple[GroundedAnswerService, DocumentIngestor, Database],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    service, _, _ = service_and_ingestor
+    contents = [
+        "alpha maintenance note",
+        "alpha reference",
+        "alpha checklist",
+        "alpha appendix",
+        "beta gamma delta epsilon procedure",
+    ]
+    hits = [
+        SearchHit(
+            chunk=ChunkRecord(
+                id=f"chunk-{index}",
+                document_id="document",
+                page_number=1,
+                ordinal=index,
+                content=content,
+                normalized_content=content,
+                source_type=SourceType.TEXT,
+                bbox=None,
+                embedding=[],
+            ),
+            score=1 - index / 10,
+            bm25_score=1 - index / 10,
+            raw_bm25_score=1,
+            vector_score=0.2,
+            document_title="Synthetic",
+            document_version="1.0",
+            equipment_model="PX-200",
+            document_type=DocumentType.MANUAL,
+        )
+        for index, content in enumerate(contents)
+    ]
+
+    monkeypatch.setattr(service.retriever, "search", lambda *_args, **_kwargs: hits)
+    response = await service.answer(
+        AskRequest(question="alpha beta gamma delta epsilon", top_k=5)
+    )
+
+    assert response.abstained
+    assert response.evidence_decision.reason == EvidenceReason.WEAK_SUPPORT
+    assert response.evidence_decision.query_token_coverage == pytest.approx(0.2)
+
+
 def test_query_log_does_not_retain_question_or_answer_text(
     service_and_ingestor: tuple[GroundedAnswerService, DocumentIngestor, Database],
 ) -> None:
@@ -204,7 +277,15 @@ def test_query_log_does_not_retain_question_or_answer_text(
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     "provider_answer",
-    ["- Unsupported citation [99]", "- Uncited procedural step"],
+    [
+        "- Unsupported citation [99]",
+        "- Uncited procedural step",
+        (
+            "Applicable guidance\n\n- Inspect connector J4 [1]\n\n"
+            "Safety prerequisites\n\n- Apply lockout/tagout [1]"
+        ),
+        "Applicable guidance\n\n- Inspect connector J4 at 999 C [1]",
+    ],
 )
 async def test_external_provider_invalid_citations_fall_back(
     service_and_ingestor: tuple[GroundedAnswerService, DocumentIngestor, Database],
@@ -249,4 +330,54 @@ async def test_external_provider_invalid_citations_fall_back(
         question, hits, decision
     )
     assert "Applicable guidance" in draft.answer
+    assert draft.answer != provider_answer
     assert all(index <= len(hits) for index in draft.referenced_indices)
+
+
+@pytest.mark.asyncio
+async def test_external_provider_accepts_complete_safety_first_citations(
+    service_and_ingestor: tuple[GroundedAnswerService, DocumentIngestor, Database],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    service, _, _ = service_and_ingestor
+    question = "Which cooling components should I inspect for fault E-17?"
+    hits = service.retriever.search(question)
+    decision = EvidenceGate(service.retriever.settings).decide(question, hits)
+    provider_answer = (
+        "Safety prerequisites\n\n- Apply lockout/tagout before opening [1]\n\n"
+        "Applicable guidance\n\n- Inspect connector J4 for fault E-17 [1]"
+    )
+    settings = Settings(
+        environment="test",
+        answer_provider="openai-compatible",
+        llm_api_key="test-key",
+        llm_model="test-model",
+    )
+
+    class FakeResponse:
+        def raise_for_status(self) -> None:
+            return None
+
+        def json(self) -> dict[str, object]:
+            return {"choices": [{"message": {"content": provider_answer}}]}
+
+    class FakeClient:
+        def __init__(self, **_: object) -> None:
+            pass
+
+        async def __aenter__(self) -> FakeClient:
+            return self
+
+        async def __aexit__(self, *_: object) -> None:
+            return None
+
+        async def post(self, *_: object, **__: object) -> FakeResponse:
+            return FakeResponse()
+
+    monkeypatch.setattr(httpx, "AsyncClient", FakeClient)
+    draft = await OpenAICompatibleAnswerGenerator(settings).generate(
+        question, hits, decision
+    )
+
+    assert draft.answer == provider_answer
+    assert draft.referenced_indices == (1,)

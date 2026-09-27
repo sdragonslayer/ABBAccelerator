@@ -10,7 +10,7 @@ Verified implementation work includes:
 - Structured abstention reasons including weak support, wrong model, wrong version, missing applicable documents, and empty document selection.
 - Source-derived safety prerequisites before guidance and hard refusal of safeguard/interlock bypass requests.
 - Application-owned citations restricted to evidence indices actually referenced by the answer.
-- Validation and extractive fallback for missing, out-of-range, or incomplete external-provider citations.
+- Validation and extractive fallback for missing/out-of-range citations, uncited content lines, unsupported identifiers/numbers, and incorrect safety ordering in external-provider output.
 - Equipment model and document type metadata with additive SQLite migration.
 - Exact model/version/document filters plus visible mixed-version and bulletin-applicability warnings.
 - Streamed upload limits, PDF signature/parser validation, failed-upload cleanup, and validated preview bounding boxes.
@@ -48,7 +48,7 @@ The post-fix locked synthetic run passed 25/25 authored cases with:
 
 These results apply only to the synthetic PX-200 corpus and 25 authored locked cases in local extractive mode. The citation metric is an automated document-title proxy, not human-adjudicated claim-level faithfulness. Independent maintenance-domain review remains required before external accuracy claims.
 
-The runtime report is written to ignored path `data/evaluation-results/latest.json`. It includes per-case results, configuration, timestamp, and corpus checksum. Its commit field truthfully reports that no commit identifier is available because this workspace is not currently a Git repository.
+The runtime report is written to ignored path `data/evaluation-results/latest.json`. It includes per-case results, configuration, timestamp, corpus checksum, Git commit, and dirty-worktree status. The final evaluation must be rerun after committing so it binds to the submitted revision.
 
 ## Reproducible local path
 
@@ -250,16 +250,29 @@ Why first: it converts a synthetic technical proof into trustworthy domain evide
 
 ## Remaining work requiring human or external coordination
 
-- Initialize and push the approved source repository; the current workspace is not a Git repository.
+- Verify the configured source repository is accessible as intended and tag the submitted commit.
 - Add verified team identity and repository/demo links.
 - Capture desktop and narrow-viewport screenshots after a clean seed.
-- Produce the accepted presentation upload file from the outline above.
+- Regenerate the tracked presentation PDF: page 3 still says only six smoke cases exist and runtime verification is pending; add current bounded results and verified links/screenshots as appropriate.
 - Record primary and backup videos, add captions, and verify playback/access privately.
 - Obtain independent maintenance-domain review of the evaluation cases and citations.
 - Confirm unresolved organizer questions in `docs/SUBMISSION_CHECKLIST.md`.
 - Submit before the internal four-hour safety buffer.
 
-## Final verification — 2026-09-21
+## Verification update — 2026-09-26
+
+- Evidence sufficiency now evaluates the exact pruned evidence bundle sent to the answer provider.
+- Hosted-answer validation now rejects uncited content lines, unsupported identifiers/numbers, and incorrect safety ordering.
+- Recall@1/5 and MRR now use raw retriever ranks rather than final citation order; citation completeness participates in supported-case pass/fail.
+- Duplicate file reuse reports conflicting supplied metadata instead of silently hiding it.
+- Evaluation reports record the Git commit and dirty-worktree state.
+- `uv run --locked pytest`: 30 passed; the same two upstream TestClient deprecation warnings remain.
+- `uv run --locked ruff check .`, `uv run --locked mypy src`, and `uv lock --check`: passed.
+- Fresh isolated locked evaluation: 25/25; median/P95 answer latency 20.833/24.871 ms.
+- `uv` is the sole supported packaging and execution path.
+- The tracked three-page `ProofRAG_Idea_Report.pdf` opens and is under 50 MB, includes the team and synthetic/non-ABB disclaimer, but contains stale evaluation copy on page 3 and has no link annotations or embedded screenshots.
+
+## Historical verification — 2026-09-21
 
 - `uv sync --locked --offline`: passed (38 packages checked).
 - Synthetic PDF build and clean seed: passed; manual 7 blocks in 326.2 ms, bulletin 1 block in 148.5 ms.
@@ -269,8 +282,8 @@ Why first: it converts a synthetic technical proof into trustworthy domain evide
 - Locked evaluation: 25/25 passed; latest report median/P95 latency 23.641/27.874 ms.
 - `uv lock --check`: passed.
 - Secret-pattern review found only documentation placeholders, a test-only key, and source configuration/authorization code; no credential candidate was found.
-- Docker build was not run because the Docker CLI is not installed on this machine.
-- Runtime database, uploads, evaluation output, environments, and caches are covered by `.gitignore`. The workspace is not a Git repository, so committed-file and commit-ID checks are impossible here.
+- The verified local `uv` workflow is the supported demo and evaluation path.
+- Runtime database, uploads, evaluation output, environments, and caches are covered by `.gitignore`. At the time of this historical run the workspace was not a Git repository; the 2026-09-26 update above supersedes that repository-status note.
 
 ## Repository hygiene
 

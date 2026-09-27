@@ -98,11 +98,11 @@ Cosine values are not query-normalized; doing so would make the best irrelevant 
 Ranking and evidence sufficiency are separate. The evidence gate checks discriminative query-token coverage, exact requested fault/model/connector/number identifiers, absolute cosine support, and model/version applicability. It returns a structured reason such as `weak_support`, `model_mismatch`, `version_mismatch`, or `no_document_selected`.
 
 - `ExtractiveAnswerGenerator` selects the most query-relevant sentences and always attaches source numbers.
-- `OpenAICompatibleAnswerGenerator` sends only retrieved excerpts with a strict grounding prompt. Missing/out-of-range citation markers or uncited procedural bullets trigger extractive fallback. The application creates citation objects only for referenced evidence indices.
+- `OpenAICompatibleAnswerGenerator` sends only retrieved excerpts with a strict grounding prompt. Missing/out-of-range citations, uncited content lines, unsupported identifiers/numbers, or incorrect safety ordering trigger extractive fallback. The application creates citation objects only for referenced evidence indices.
 
 ### `service.py`
 
-Coordinates retrieval, decides applicability, calls the answer provider, constructs only referenced citations, adds independent safety warnings, and records a privacy-preserving query audit entry. Safeguard-bypass requests hard-refuse before procedural generation.
+Coordinates retrieval, prunes candidates, applies the evidence decision to the exact bundle available to the answer provider, constructs only referenced citations, adds independent safety warnings, and records a data-minimized query audit entry. Safeguard-bypass requests hard-refuse before procedural generation.
 
 ### `api.py`
 
@@ -169,6 +169,7 @@ curl -X POST http://127.0.0.1:8000/api/ask \
 
 ```powershell
 uv sync --locked
+uv run --locked python scripts/build_demo_pdfs.py
 uv run --locked proofrag-seed
 uv run --locked proofrag
 ```
