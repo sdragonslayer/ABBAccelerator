@@ -1,4 +1,4 @@
-# ProofRAG Maintenance Intelligence
+# ProofRAG
 
 ProofRAG is an evidence-first multimodal troubleshooting assistant built for the **ABB Accelerator 2026 — Multimodal Maintenance Intelligence Agent** theme. It ingests maintenance manuals and service bulletins, retrieves relevant text/tables/figures, and answers only when the indexed evidence is strong enough. Every supported answer carries inspectable citations; weak evidence produces an explicit abstention.
 
