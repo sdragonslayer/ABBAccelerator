@@ -96,7 +96,7 @@ Visual: shield with six compact trust controls. Include the synthetic-corpus dis
 - False procedural-answer rate: **0.000**
 - Safety-order accuracy: **1.000**
 - Automated document-level citation precision proxy: **0.750**
-- Median / P95 query latency: **23.641 / 27.874 ms** on the final verification run
+- Median / P95 answer latency: **20.833 / 24.871 ms** on the corrected 2026-09-26 run
 
 Footer qualifier: synthetic PX-200 corpus, 25 authored locked cases, local extractive mode; not independently adjudicated and not a field-performance claim. Preserve the documented first run (18/25) and explain that the rerun followed fixes for genuine control defects.
 

@@ -56,6 +56,8 @@ If the form shortens the option label, select the choice containing **Multimodal
 
 The form requires an uploaded `.key`, `.odp`, `.odt`, `.pdf`, `.pps`, `.ppt`, or `.pptx` file under 50 MB. Use the outline in [`PRESENTATION_DECK.md`](PRESENTATION_DECK.md) to create the final deck.
 
+Do not upload the currently tracked `ProofRAG_Idea_Report.pdf` unchanged: its third page still contains pre-verification evaluation copy and it lacks final screenshots and verified links.
+
 Recommended filename:
 
 ```text

@@ -1,10 +1,14 @@
 # Submission Checklist
 
+## Current disposition
+
+The prototype and automated verification are complete enough to freeze for submission. Remaining unchecked items are final content production, release binding, external access checks, and organizer confirmations. Independent domain review is a prerequisite for broader accuracy claims, not a confirmed platform upload requirement.
+
 ## 1. Project summary
 
 - [x] Problem, solution, innovation, users, and impact documented.
 - [x] ABB judging alignment documented.
-- [ ] Add final team name and member details.
+- [ ] Confirm the exact platform team name, member role, university, and contact details.
 - [ ] Confirm exact Idea Phase form/format with the organizer.
 
 Artifact: `docs/PROJECT_SUMMARY.md`
@@ -56,7 +60,7 @@ Artifact: `docs/DEMO_VIDEO_SCRIPT.md`
 - [x] Production scaling path.
 - [x] Limitations and future work.
 - [x] Responsible AI and threat model.
-- [ ] Add screenshots after the first run.
+- [ ] Add final desktop and narrow-viewport screenshots captured from a clean seed.
 - [x] Add actual locked evaluation results and retain the first-run defect record.
 
 Artifacts: `docs/TECHNICAL_DOCUMENTATION.md`, `docs/EVALUATION_PLAN.md`, and `docs/RESPONSIBLE_AI.md`
@@ -89,10 +93,13 @@ Artifacts: `docs/PRESENTATION_DECK.md`, `docs/DESIGN_AI_REPORT_BRIEF.md`
 - [x] `uv run --locked pytest` (30 passed; two upstream deprecation warnings)
 - [x] `uv run --locked ruff check .`
 - [x] `uv run --locked mypy src`
-- [x] `uv run --locked proofrag-evaluate` (25/25 authored locked cases on 2026-09-26; rerun after committing for clean revision metadata)
+- [x] `uv run --locked proofrag-evaluate` (25/25 authored locked cases on the corrected 2026-09-26 run)
+- [ ] After committing final submission content, rerun `uv run --locked proofrag-evaluate`; confirm the report names the submitted commit, records `working_tree_dirty: false`, and still passes 25/25 after review.
 - [x] All current Markdown claims distinguish measured synthetic evidence from targets.
 - [x] Keep the verified locked `uv` workflow as the sole supported execution path.
 - [ ] All third-party sources and licenses are attributed.
-- [ ] No proprietary or personal data is committed.
+- [ ] No confidential, proprietary, export-controlled, customer, or unapproved personal data is committed.
+- [ ] Screenshots, video, PDF metadata, and browser tabs contain no credentials or sensitive information.
 - [ ] Submission links work in a private browser window.
+- [ ] Deck, video, repository, and evaluation evidence all identify the same submitted revision.
 - [ ] Upload is complete before the earlier platform deadline.

@@ -76,7 +76,7 @@ uv run --locked mypy src
 uv run --locked proofrag-evaluate
 ```
 
-Expected current results are 30 passing tests and 25/25 authored locked evaluation cases. The evaluation report is written to `data/evaluation-results/latest.json` and is ignored by version control. The development and locked sets contain 25 cases each; the original six-case file is retained only as a smoke fixture. Rerun evaluation after committing so the report records a clean submitted revision.
+Expected current results are 30 passing tests and 25/25 authored locked evaluation cases. The evaluation report is written to `data/evaluation-results/latest.json` and is ignored by version control; review its timestamp, commit, worktree state, corpus checksum, configuration, and per-case output before citing it. The development and locked sets contain 25 cases each; the original six-case file is retained only as a smoke fixture. After committing the final submission content, rerun evaluation so the report records the exact submitted revision with a clean worktree.
 
 ## Configuration
 

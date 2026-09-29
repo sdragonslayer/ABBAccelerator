@@ -123,10 +123,10 @@ The synthetic PX-200 base manual and service bulletin create three clear scenes:
 | Project summary | `docs/PROJECT_SUMMARY.md` | Draft complete |
 | Working prototype | `src/proofrag/` | Locked runtime and automated paths verified |
 | Demo video | `docs/DEMO_VIDEO_SCRIPT.md` | Script complete; recording pending |
-| Source repository | Tracked `origin` on `master` | Initialized and pushed locally; public/private-browser access check and submission tag pending |
+| Source repository | Tracked `origin` on `master` | Configured and tracking; private-browser access check and submission tag pending |
 | Technical documentation | `docs/TECHNICAL_DOCUMENTATION.md` | Draft complete |
 | Presentation upload | `ProofRAG_Idea_Report.pdf` and `docs/PRESENTATION_DECK.md` | Three-page PDF opens and is under 50 MB, but page 3 has stale pre-verification evaluation copy and no link annotations/screenshots; regenerate before submission |
-| Evaluation evidence | `docs/EVALUATION_PLAN.md` and evaluation runner | First run and post-fix locked run recorded |
+| Evaluation evidence | `docs/EVALUATION_PLAN.md` and evaluation runner | First run, post-fix run, and corrected-metric 2026-09-26 run recorded |
 | Responsible AI | `docs/RESPONSIBLE_AI.md` | Draft complete |
 
 ## 7. Documentation index
@@ -182,13 +182,15 @@ Record actual results and defects. Do not edit claims to imply that targets were
 
 ## 9. Required work before submission
 
+No unresolved submission-blocking implementation defect is recorded after the 2026-09-26 automated verification. Freeze the implementation unless the final walkthrough exposes a reproducible regression.
+
 ### Critical
 
-1. Create and upload the required presentation file from the outline.
-2. Capture screenshots and record the primary and backup demo videos.
-3. Verify the configured repository is accessible as intended, then tag the submitted commit.
-4. Have an independent domain reviewer adjudicate the 50 authored evaluation cases.
-5. Verify final repository, video, deck, and submission links in a private browser.
+1. Regenerate and upload the required presentation file; the tracked PDF still contains stale pre-verification copy.
+2. Capture final screenshots and record the primary and backup demo videos.
+3. Commit the final submission content, rerun the locked evaluation, and confirm the report points to that clean revision.
+4. Verify repository, video, deck, and submission links in a private browser, then tag the exact submitted commit.
+5. Confirm the final team identity/contact fields and submit before the earlier platform cutoff.
 
 ### Organizer confirmations
 
@@ -201,11 +203,17 @@ Record actual results and defects. Do not edit claims to imply that targets were
 
 ### Polish
 
-- Add team names and roles.
+- Confirm the platform team name, member role, university, and contact details.
 - Add a public repository/demo link after verification.
-- Replace slide targets with measured results.
+- Replace the stale tracked-PDF copy with the bounded 2026-09-26 measured results.
 - Attribute all third-party assets and licensed source documents.
 - Export a PDF deck under 50 MB and verify it opens.
+
+### Before broader accuracy or pilot claims
+
+- Have independent maintenance-domain reviewers adjudicate the authored cases, answer claims, and citations.
+- Report human claim-level citation precision separately from the automated document-title proxy.
+- Validate on approved real manuals before making equipment, field-accuracy, downtime, or cost claims.
 
 ## 10. Claims policy
 

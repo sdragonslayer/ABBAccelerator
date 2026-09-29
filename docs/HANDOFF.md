@@ -27,6 +27,10 @@ Figure support means figure-region and caption indexing. It is not full diagram 
 
 “Evidence support” is a retrieval/support signal, not a probability that an answer is correct. Raw ranking scores remain diagnostic information.
 
+## Current disposition
+
+No unresolved submission-blocking implementation defect is recorded after the 2026-09-26 automated verification. Keep the implementation stable unless the final walkthrough reveals a reproducible regression. The remaining submission work is content production and external verification; independent domain review remains necessary before field-performance or claim-level accuracy statements.
+
 ## Evaluation record
 
 The first frozen locked run on 2026-09-21 passed 18/25 cases. Review found genuine defects in compound safeguard refusal, ligature normalization, and evidence excerpt selection. That history is intentionally retained in `docs/EVALUATION_PLAN.md`.
@@ -43,12 +47,12 @@ The post-fix locked synthetic run passed 25/25 authored cases with:
 | Safety-order accuracy | 1.000 |
 | Citation completeness | 1.000 |
 | Automated document-level citation precision proxy | 0.750 |
-| Median query latency | 23.641 ms |
-| P95 query latency | 27.874 ms |
+| Median answer latency | 20.833 ms |
+| P95 answer latency | 24.871 ms |
 
 These results apply only to the synthetic PX-200 corpus and 25 authored locked cases in local extractive mode. The citation metric is an automated document-title proxy, not human-adjudicated claim-level faithfulness. Independent maintenance-domain review remains required before external accuracy claims.
 
-The runtime report is written to ignored path `data/evaluation-results/latest.json`. It includes per-case results, configuration, timestamp, corpus checksum, Git commit, and dirty-worktree status. The final evaluation must be rerun after committing so it binds to the submitted revision.
+The runtime report is written to ignored path `data/evaluation-results/latest.json`. Because that file is local and replaceable, verify its timestamp, corpus checksum, configuration, Git commit, dirty-worktree state, and per-case output before using it. The final evaluation must run after the submission content is committed so it binds to the submitted revision with a clean worktree.
 
 ## Reproducible local path
 
@@ -151,7 +155,7 @@ Visual: five-layer architecture with citations and safety outside the optional m
 - Unsupported accuracy: 1.000; false procedural-answer rate: 0.000.
 - Safety-order accuracy: 1.000.
 - Automated document-level citation precision proxy: 0.750.
-- Median/P95 latency: 23.641/27.874 ms on the final verification run.
+- Median/P95 answer latency: 20.833/24.871 ms on the corrected 2026-09-26 run.
 - Retain the first-run 18/25 → defect review → post-fix rerun timeline.
 
 Qualifier: authored synthetic cases, not independently adjudicated and not a field-performance claim.
@@ -248,16 +252,23 @@ Why first: it converts a synthetic technical proof into trustworthy domain evide
 - Evaluate multilingual retrieval while preserving the original-language quote beside translations.
 - Package an offline field-laptop mode with signed corpus updates and local inference.
 
-## Remaining work requiring human or external coordination
+## Remaining work
 
-- Verify the configured source repository is accessible as intended and tag the submitted commit.
-- Add verified team identity and repository/demo links.
+### Submission-critical, human or external
+
+- Confirm the exact platform team name, member role, contact details, and permitted deliverable format.
 - Capture desktop and narrow-viewport screenshots after a clean seed.
-- Regenerate the tracked presentation PDF: page 3 still says only six smoke cases exist and runtime verification is pending; add current bounded results and verified links/screenshots as appropriate.
-- Record primary and backup videos, add captions, and verify playback/access privately.
-- Obtain independent maintenance-domain review of the evaluation cases and citations.
-- Confirm unresolved organizer questions in `docs/SUBMISSION_CHECKLIST.md`.
+- Regenerate the tracked presentation PDF: page 3 still says only six smoke cases exist and runtime verification is pending; add the current bounded results and only verified links/screenshots.
+- Record primary and backup videos, add captions, and verify playback and access in a private browser window.
+- Commit the final submission content, rerun the locked evaluation against that clean revision, and review the generated report metadata and per-case output.
+- Verify repository access from a private browser, tag the exact submitted commit, and ensure the deck/video links refer to the same revision.
+- Resolve or consciously accept the organizer questions listed in `docs/SUBMISSION_CHECKLIST.md`.
 - Submit before the internal four-hour safety buffer.
+
+### Required before broader accuracy or pilot claims
+
+- Obtain independent maintenance-domain review of the authored evaluation cases, answer claims, and citations.
+- Replace the automated document-title citation proxy with human-adjudicated claim-level precision and faithfulness results.
 
 ## Verification update — 2026-09-26
 
@@ -279,7 +290,7 @@ Why first: it converts a synthetic technical proof into trustworthy domain evide
 - `pytest`: 23 passed; two upstream TestClient deprecation warnings remain.
 - `ruff check .`: passed.
 - `mypy src`: passed in strict mode.
-- Locked evaluation: 25/25 passed; latest report median/P95 latency 23.641/27.874 ms.
+- Locked evaluation: 25/25 passed; the then-current report recorded median/P95 latency of 23.641/27.874 ms.
 - `uv lock --check`: passed.
 - Secret-pattern review found only documentation placeholders, a test-only key, and source configuration/authorization code; no credential candidate was found.
 - The verified local `uv` workflow is the supported demo and evaluation path.
