@@ -257,6 +257,7 @@ Why first: it converts a synthetic technical proof into trustworthy domain evide
 ### Submission-critical, human or external
 
 - Confirm the exact platform team name, member role, contact details, and permitted deliverable format.
+- Run the restyled industrial UI (2026-10-01, static files only) in a browser before capturing anything: it has not been exercised at runtime yet. Check the three demo prompts, citation chips, the evidence-gate strip, uploads, and the 1200/900/620px layouts.
 - Capture desktop and narrow-viewport screenshots after a clean seed.
 - Regenerate the tracked presentation PDF: page 3 still says only six smoke cases exist and runtime verification is pending; add the current bounded results and only verified links/screenshots.
 - Record primary and backup videos, add captions, and verify playback and access in a private browser window.

@@ -112,6 +112,8 @@ Exposes health, ingestion, document-listing, questioning, and highlighted-page r
 
 The interface intentionally uses static HTML/CSS/JavaScript rather than a second package ecosystem. It supports uploads, corpus selection, equipment/version filters, evidence support (explicitly not a probability), applicability warnings, persistent ingestion warnings, citation cards, demo prompts, and a modal source viewer.
 
+The visual language is a light "technical sheet" built for shop-floor legibility: a graphite status bar (system lamp, document/evidence-block counts, and a permanent synthetic-corpus/not-ABB label), square panels on a gridded canvas, monospace labels for identifiers and page numbers, and colors used only for meaning (amber = safety, green = gate accepted, red = abstention/fault, orange = primary action). After a query, an evidence-gate strip shows the accept/abstain verdict, reason, evidence support, query coverage, and matched/missing identifiers from `EvidenceDecision`. Safety notices render before applicability warnings and the answer; answer sections whose heading mentions safety are drawn as hazard blocks. Inline `[n]` markers become clickable citation chips only when `n` matches an application-owned citation in the response; unknown markers stay plain text. All document and model strings are inserted with `textContent`.
+
 ## 6. Data model
 
 ### Documents
